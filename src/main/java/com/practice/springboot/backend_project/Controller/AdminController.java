@@ -26,7 +26,7 @@ public class AdminController {
 
     @PostMapping("/createShow")
     public ResponseEntity<?> createShowByAdmin(@RequestBody Show show){
-        return ResponseEntity.ok().body(show);
+        return ResponseEntity.ok().body(showService.createShow(show));
     }
 
 }

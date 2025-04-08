@@ -1,39 +1,43 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: Ishar@120824
-      MYSQL_DATABASE: movie
-      MYSQL_USER: root
-      MYSQL_PASSWORD: Ishar@120824
-    ports:
-      - "3306:3306"
-    networks:
-      - backend-network
-
-  app:
+  backend-app:
     build: .
+    container_name: movie-backend
+    restart: always
     ports:
       - "8080:8080"
-    depends_on:
-      - mysql
     environment:
-      SPRING_APPLICATION_NAME: backend-project
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/movie
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: Ishar@120824
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JPA_SHOW_SQL: "true"
-      SPRING_MAIN_ALLOW_CIRCULAR_REFERENCES: "true"
-      JWT_SECRET: MyJwtSecretKey@12345
-      JWT_EXPIRATION: 3600000
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/movie?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Ishar@120824
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - JWT_SECRET=MyJwtSecretKey@12345
+      - JWT_EXPIRATION=3600000
+    depends_on:
+      - mysqldb
     networks:
-      - backend-network
+      - movie-network
+
+  mysqldb:
+    image: mysql:8.0
+    container_name: movie-mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=Ishar@120824
+      - MYSQL_DATABASE=movie
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - movie-network
+    command: --default-authentication-plugin=mysql_native_password
 
 networks:
-  backend-network:
+  movie-network:
     driver: bridge
+
+volumes:
+  mysql-data:

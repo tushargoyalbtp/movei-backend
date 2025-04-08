@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.practice.springboot.backend_project.BackendProjectApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.180 s -- in com.practice.springboot.backend_project.BackendProjectApplicationTests

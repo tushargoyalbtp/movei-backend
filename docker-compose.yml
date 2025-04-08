@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Ishar@120824
+      MYSQL_DATABASE: movie
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Ishar@120824
+    ports:
+      - "3306:3306"
+    networks:
+      - backend-network
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_APPLICATION_NAME: backend-project
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/movie
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Ishar@120824
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_MAIN_ALLOW_CIRCULAR_REFERENCES: "true"
+      JWT_SECRET: MyJwtSecretKey@12345
+      JWT_EXPIRATION: 3600000
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
